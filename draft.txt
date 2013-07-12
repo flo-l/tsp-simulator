@@ -1,0 +1,37 @@
+Island => repräsentation einer Insel, wird nur zum initialisieren und 
+          visualisieren des endergebnisses benutzt
+
+Population => Container für Islands, enthält eine Matrix mit den Strecken von jedem Island
+              zu jedem Island. Diese Matrix wird dann in der Simulation benutzt
+
+Salesman => repräsentiert ein Individuum, besteht aus einer DNA Kette aus Islands und
+            einer daraus erechneten fitness
+
+            die dna kette ist ein array aus integers, jeder repräsentiert ein Island
+
+
+Die Simulation startet mit Daten aus einer 
+vorher festgelegten Datei, diese enthält die Islands! (/savings)
+
+Crossover:
+Aus Zwei Eltern werden Zwei Kinder:
+
+Man fügt die Inseln von E1 (erstes Elternteil) solange zu K1 (erstes Kind) hinzu, bis 
+sich die Route der Eltern an dieser Stelle kreuzt oder eine gewisse anzahl an islands
+überschritten wird.
+
+Ab der Überschneidung/Überschreitung werden ab nun Gene von
+E2 zu K1 hinzugefügt (und umgekehrt, also E1 zu K2). Außerdem wird der counter resettet!
+
+Allerdings werden die Gene nicht stur kopiert, sondern aus einem Pool, nämlich den 
+vorhandenen Inseln genommen, jedes Kind hat jede Insel exakt einmal zur Verfügung.
+
+Ist die Insel des Elternteils an einer Stelle des Kindes nicht mehr verfügbar wird nil
+eingesetzt und zum Schluss werden die Überbleibsel des Pools an allen nil-Stellen 
+zufällig eingesetzt.
+
+Mutation:
+Zufällige Teile der DNA werden ausgetauscht
+
+Wichtig!
+Island #0 ist immer der anfang und das Ende jeder DNA Kette!!
