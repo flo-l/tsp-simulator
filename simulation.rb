@@ -4,15 +4,15 @@ require './island.rb'
 require './salesman.rb'
 require './population.rb'
 require './plotter.rb'
+require './project.rb'
 
-#load settings from file given in ARGV[0] (marshalled)
-settings = Marshal.load(File.open(ARGV[0], "r"))
-N = settings[0]
-STARTING_POINT = settings[1]
-ISLANDS = settings[2]
+#load settings from project given in ARGV[0]
+p = Project.open(ARGV[0]).load
 
-#load settings from configuration file
-require './configuration.rb'
+#store settings
+N = p.n
+STARTING_POINT = p.starting_point
+ISLANDS = p.islands
 
 #create cost array for the starting point
 FIRST = (0...N).collect { |n| ISLANDS[n].distance_to STARTING_POINT }
