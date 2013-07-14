@@ -7,12 +7,12 @@ require './plotter.rb'
 require './project.rb'
 
 #load settings from project given in ARGV[0]
-p = Project.open(ARGV[0]).load
+project = Project.open(ARGV[0])
 
 #store settings
-N = p.n
-STARTING_POINT = p.starting_point
-ISLANDS = p.islands
+N = project.n
+STARTING_POINT = project.starting_point
+ISLANDS = project.islands
 
 #create cost array for the starting point
 FIRST = (0...N).collect { |n| ISLANDS[n].distance_to STARTING_POINT }
@@ -54,3 +54,6 @@ C.times do
     Thread.new { Plotter.plot population.salesmen.first }
   end
 end
+
+#save the best result in the project
+project.save_result(population.salesmen.first)

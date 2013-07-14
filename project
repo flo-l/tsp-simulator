@@ -1,0 +1,12 @@
+#!/usr/bin/ruby
+#this is a manager for projects
+
+require './project.rb'
+
+def new_project
+  #create project with name given in ARGV[1] and N given in ARGV[2]
+  Project.create(ARGV[1], ARGV[2].to_i)
+end
+
+#read first parameter and call corresponding method
+send (ARGV[0]+"_project").to_sym
