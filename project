@@ -16,13 +16,13 @@ def simulate_project
   #create a new Simulation object, ARGV[1] = name, ARGV[2] = number of simulation runs (not C!!)
   simulation = Simulation.new(ARGV[1])
 
-  #check how many runs are wanted
-  runs = (ARGV[2] || 1).to_i
+  #check how many runs are wanted (default = 1):
+  runs = ARGV[2..3].detect { |argument| argument.to_i != 0 }.to_i || 1
 
-  #check if plots during the simulation are wanted
-  plot = ARGV[2] == "plot" || ARGV[3] == "plot"
+  #check if plotting is wanted
+  plot = ARGV[2..3].any? { |argument| argument == "plot" }
 
-  #simulate ARGV[2] times!
+  #simulate runs times!
   runs.times do
     simulation.simulate!(plot)
   end
