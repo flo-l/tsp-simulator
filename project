@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-#this is a manager for projects
+#this is a manager for everything
 
 require 'fileutils'
 require './lib/simulation.rb'
