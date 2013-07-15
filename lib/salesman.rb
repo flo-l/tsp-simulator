@@ -25,7 +25,6 @@ class Salesman
     @fitness <=> other.fitness
   end
 
-  #pairing (broken²)
   def pair_with(other)
     #pools (all islands, once for every child)
     #use own dna because it's a valid pool
@@ -33,8 +32,8 @@ class Salesman
     pool2 = @dna.dup
 
     #children dna arrays
-    child1 = []
-    child2 = []
+    child1 = Array.new(N)
+    child2 = Array.new(N)
 
     state = true  #needed to switch between kids when assigning dna strings
 

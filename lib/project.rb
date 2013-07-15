@@ -67,21 +67,13 @@ class Project
     #save fitness, to be used as filename
     fitness = result.fitness.to_s
 
-    #find an unused file name
-    while File.exists?(@folder.path + "/results/" + fitness)
-      #check if the same result exists already
-      if result.dna == Marshal.load(File.open(@folder.path + "/results/" + fitness, "r"))
-        return true 
-      else
-        #append an underline to the filename
-        fitness << "_"
-      end
-    end
+    #don't overwrite if the same result exists already
+    return true if File.exists?(@folder.path + "/results/" + fitness)
 
     #output file
     file = File.open(@folder.path + "/results/" + fitness, "w")
 
-    #save the result_dna into the file
+    #save the result into the file
     Marshal.dump(result, file)
 
     #close the file

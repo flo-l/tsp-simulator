@@ -6,12 +6,11 @@ class Population
   end
 
   def selection!
-    #pair all salesmen and keep only the good 50%!
+    #random order during pairing
     @salesmen.shuffle!
 
-    #put children in so named array
-    children = []
-    @salesmen.each_cons(2) { |pair| children.concat pair[0].pair_with(pair[1]) }
+    #pair every pair of salesmen => array of children
+    children = @salesmen.each_slice(2).collect_concat { |a,b| a.pair_with(b) }
 
     #keep only the better 50%
     @salesmen = (@salesmen + children).sort[0...S]
@@ -19,8 +18,6 @@ class Population
 
   def mutation!
     #mutate M % of the population
-    (N*M).floor+1.times do
-      @salesmen.sample.mutate!
-    end
+    @salesmen.sample((N*M).floor+1).map!(&:mutate!)
   end
 end

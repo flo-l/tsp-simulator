@@ -17,7 +17,8 @@ def simulate_project
   simulation = Simulation.new(ARGV[1])
 
   #check how many runs are wanted (default = 1):
-  runs = ARGV[2..3].detect { |argument| argument.to_i != 0 }.to_i || 1
+  runs = ARGV[2..3].detect { |argument| argument.to_i != 0 }.to_i
+  runs = 1 if runs == 0
 
   #check if plotting is wanted
   plot = ARGV[2..3].any? { |argument| argument == "plot" }
