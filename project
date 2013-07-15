@@ -20,7 +20,7 @@ def simulate_project
   runs = (ARGV[2] || 1).to_i
 
   #check if plots during the simulation are wanted
-  plot = ARGV[3] == "plot"
+  plot = ARGV[2] == "plot" || ARGV[3] == "plot"
 
   #simulate ARGV[2] times!
   runs.times do
