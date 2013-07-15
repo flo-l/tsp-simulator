@@ -1,11 +1,50 @@
 #!/usr/bin/ruby
 #this is a manager for projects
 
-require './project.rb'
+require 'fileutils'
+require './lib/simulation.rb'
 
 def new_project
   #create project with name given in ARGV[1] and N given in ARGV[2]
   Project.create(ARGV[1], ARGV[2].to_i)
+end
+
+def simulate_project
+  #close all previous plots
+  Kernel.system("killall gnuplot_qt")
+
+  #create a new Simulation object, ARGV[1] = name, ARGV[2] = number of simulation runs (not C!!)
+  simulation = Simulation.new(ARGV[1])
+
+  #check how many runs are wanted
+  runs = (ARGV[2] || 1).to_i
+
+  #check if plots during the simulation are wanted
+  plot = ARGV[3] == "plot"
+
+  #simulate ARGV[2] times!
+  runs.times do
+    simulation.simulate!(plot)
+  end
+end
+
+def remove_project
+  #remove the project folder of the project given in ARGV[1]
+  Project.remove(ARGV[1])
+end
+
+def plot_project
+  #close all previous plots
+  Kernel.system("killall gnuplot_qt")
+  
+  #open project
+  project = Project.open(ARGV[1])
+
+  #get results
+  results = project.results
+
+  #plot them all
+  results.each { |result| Plotter.plot(result) }
 end
 
 #read first parameter and call corresponding method
