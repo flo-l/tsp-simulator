@@ -8,8 +8,13 @@ class Salesman
     #dna is an array of integers, each represents ISLAND[n]
     @dna = dna 
 
-    #calculate fitness
-    path_lengths = [FIRST[@dna.first]] #from the starting point to first island
+    #needs to be redone after mutation
+    calculate_fitness
+  end
+
+  def calculate_fitness
+    #from the starting point to first island
+    path_lengths = [FIRST[@dna.first]]
 
     #add all path lengths from island to island
     @dna.each_cons(2) { |island1,island2| path_lengths << MATRIX[island1,island2] }
@@ -42,6 +47,9 @@ class Salesman
     #exchange them!
     @dna[e] = h
     @dna[f] = g
+
+    #recalculate fitness
+    calculate_fitness
   end
 
   private
