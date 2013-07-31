@@ -9,8 +9,8 @@ class Plotter
     Gnuplot.open do |gp|
       Gnuplot::Plot.new( gp ) do |plot|
   
-        plot.title  "Weglänge = " + salesman.fitness.to_s
-    
+        plot.title  "Fitness: " + salesman.fitness.to_s + " Crossover-algorithm: " + CROSSOVER.to_s
+
         #create arrays for x and y
         x = [STARTING_POINT.x]
         y = [STARTING_POINT.y]

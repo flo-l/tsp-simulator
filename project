@@ -2,11 +2,14 @@
 #this is a manager for everything
 
 require 'fileutils'
+require 'benchmark'
 require './lib/simulation.rb'
 
 def new_project
-  #create project with name given in ARGV[1] and N given in ARGV[2]
-  Project.create(ARGV[1], ARGV[2].to_i)
+  raise ArgumentError, "Please specify wanted number of islands!" unless ARGV[2]
+
+  #create project with name given in ARGV[1] and N islands given in (ARGV[2]-1), because the first island isn't included in N
+  Project.create(ARGV[1], ARGV[2].to_i - 1)
 end
 
 def simulate_project
@@ -46,6 +49,59 @@ def plot_project
 
   #plot them all
   results.each { |result| Plotter.plot(result) }
+end
+
+def benchmark_project
+  #close all previous plots
+  Kernel.system("killall gnuplot_qt")
+
+  #create a new Simulation object, ARGV[1] = name
+  simulation = Simulation.new(ARGV[1])
+
+  #ARGV[2] = number of simulation runs (not C!!)
+  runs = ARGV[2].to_i
+  runs = 1 if runs == 0
+
+  #check which algorithm(s) should be benchmarked
+  if ARGV[3..-1].any? { |argument| argument == "all" }
+    algorithms = [:flo_custom, :simple_swap]
+  else
+    algorithms = ARGV[3..-1].collect { |algorithm| algorithm.downcase.to_sym }
+  end
+
+  #find best known result
+  best_result = simulation.project.results.sort.first.fitness
+
+  #store for the time spent by each algorithm (average)
+  times = []
+
+  #store for the needed simulation runs
+  needed_runs = []
+
+  #simulate each algorithm runs times, benchmark each run and print the average
+  algorithms.each do |algorithm|
+    #set algorithm
+    Object.const_set("CROSSOVER", algorithm)
+
+    #benchmark the simulation and save the needed time(s) (no plotting)
+    m = Array.new(runs) do
+      #simulate until the best (known) result was achieved or more than C rounds were needed
+      Benchmark.measure { needed_runs << simulation.simulate_until(best_result,C) }
+    end
+
+    #calculate the average time
+    times << (m.inject(:+)) / m.count
+  end
+
+  #print results
+  puts "========================"
+
+  algorithms.each_with_index do |algorithm, i|
+    puts algorithm.to_s.upcase + ": "
+    puts "Runs needed: ", needed_runs.each_slice(runs).to_a[i]
+    puts "Average time needed: ", times[i]
+    puts "------------------------"
+  end
 end
 
 #read first parameter and call corresponding method

@@ -7,6 +7,8 @@ require './lib/plotter.rb'
 require './lib/project.rb'
 
 class Simulation
+  attr_reader :project
+
   def initialize(project_name)
     #open project
     @project = Project.open(project_name)
@@ -23,28 +25,33 @@ class Simulation
     Object.const_set "MATRIX", matrix
   end
 
+  def prepare_population
+    #create s salesmen (array)
+    @salesmen = Array.new(S) { Salesman.new }
+
+    #create a population with the salesmen
+    @population = Population.new(@salesmen)
+  end
+
   def simulate!(plot=true)
     #tell the user that we start!
     puts "Starting the simulation!"
 
-    #create s salesmen (array)
-    salesmen = Array.new(S) { Salesman.new }
-
-    #create a population with the salesmen
-    population = Population.new(salesmen)
+    #(re)create the population
+    prepare_population
 
     #needed as buffer
     fitness = 1/0.0 #infinite
 
     C.times do
       #select them!
-      population.selection!
+      @population.selection!
 
       #mutate M %
-      population.mutation!
+      @population.mutation!
 
       #find best fitness
-      fitness_new = population.salesmen.first.fitness
+      fitness_new = @population.salesmen.first.fitness
 
       if fitness_new < fitness
         #save new best fitness
@@ -54,17 +61,43 @@ class Simulation
         puts fitness
 
         #plot path of new best salesman and write fitness to stdin
-        Thread.new { Plotter.plot population.salesmen.first } if plot
+        Thread.new { Plotter.plot @population.salesmen.first } if plot
       end
     end
 
     #plot best result (threaded because gnuplot may hang etc.)
-    Thread.new { Plotter.plot population.salesmen.first }
+    Thread.new { Plotter.plot @population.salesmen.first }
 
     #save the best result in the project
-    @project.save_result(population.salesmen.first)
+    @project.save_result(@population.salesmen.first)
 
     #neat finish
     puts "========================"
+  end
+
+  def simulate_until(best_fitness, max_runs)
+    #(re)create the population
+    prepare_population
+
+    #initialize fitness with infinite
+    fitness = 1/0.0
+
+    c = 0
+    while fitness > best_fitness.to_i && c < max_runs do
+      #select them!
+      @population.selection!
+
+      #mutate M %
+      @population.mutation!
+
+      #find best fitness and store it
+      fitness = @population.salesmen.first.fitness.to_i
+
+      #increment the rounds counter
+      c += 1
+    end
+
+    #return needed runs
+    c
   end
 end

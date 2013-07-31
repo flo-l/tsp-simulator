@@ -57,7 +57,7 @@ class Project
     Object.const_set "N", islands[0]
     Object.const_set "STARTING_POINT", islands[1]
     Object.const_set "ISLANDS", islands[2]
-    
+
     #load settings from configuration file
     require @folder.path + '/settings.rb'
   end
