@@ -1,3 +1,33 @@
+About:
+============================
+This is an implementation of a genetic algorithm which solves the [Travelling Salesman Problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem), the code aims to be as easy to understand as possible. 
+
+###Short feature list:
+- Genetic Algorithm
+- Support for more than one crossover-algorithm
+- Mutation
+- Organisation of Island groups and settings in "projects"
+- Comfortable command line interface
+- Plotting of islands and the paths used (also intermediate results)
+- Very understandable code, (too) many comments
+- As modular as possible, it's very easy to implement new crossover algorithms
+- Benchmark function, to compare the speed and efficiency of crossover algorithms and/or some settings
+
+
+I developed the software for school, so please tell me if you find any bugs or ugly code, I would love to know how I can improve my coding style!
+
+Installation:
+============================
+```
+git clone https://github.com/flo-l/tsp-simulator.git
+cd tsp-simulator
+bundle install
+```
+
+It's highly recommended to use jruby with this software, as it seems to be about twice as fast as MRI Ruby and also 1.5 times faster than Rubinius! Install it with the following command:
+
+    rvm install jruby
+
 How to use the software:
 ============================
 
