@@ -4,15 +4,15 @@ class Salesman
   include Comparable
   attr_reader :dna, :fitness
 
-  def initialize(dna=nil)
+  def initialize(dna=(0...N).to_a.shuffle)
     #dna is an array of integers, each represents ISLAND[n]
-    @dna = dna || (0...N).to_a.shuffle
+    @dna = dna 
 
     #calculate fitness
     path_lengths = [FIRST[@dna.first]] #from the starting point to first island
 
     #add all path lengths from island to island
-    @dna.each_cons(2) { |island_nums| path_lengths << MATRIX[island_nums[0],island_nums[1]] }
+    @dna.each_cons(2) { |island1,island2| path_lengths << MATRIX[island1,island2] }
 
     #also add path from last island back to starting point
     path_lengths << FIRST[@dna.last]
