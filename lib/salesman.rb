@@ -85,11 +85,44 @@ class Salesman
     [Salesman.new(child1), Salesman.new(child2)]
   end
 
+  def scx(other)
+    #pool (ordered)
+    pool = (0...N).to_a
+
+    #current node, #0 for the first time
+    p = 0
+
+    #iterate N times, start with zero
+    child = (0...N).map do
+      #find legitimate nodes in parents, use first valid from pool if none is found
+      l1 = pool.find { |x| x == self .dna[self .dna.index(p)+1] } || pool.first
+      l2 = pool.find { |x| x == other.dna[other.dna.index(p)+1] } || pool.first
+
+      #check which one is better
+      debug = case MATRIX[p,l1] <=> MATRIX[p,l2]
+      #it doesn't matter which one to use they are equal
+      when 0
+        p = l1
+        pool.delete l1
+      #use l1 if it's smaller
+      when -1
+        p = l1
+        pool.delete l1
+      #otherwise use l2
+      when 1
+        p = l2
+        pool.delete l2
+      end
+    end
+
+    [Salesman.new(child)]
+  end
+
   def flo_custom(other)
     #my own crossover algorithm, I'm not certain that it 
     #doesn't exist already somewhere else on the internet
 
-    #it is a slight modification of the simple_swap algorithm, but it "swaps" the parents at each point 
+    #it is a slight modification of the simple_swap algorithm, it "swaps" the parents at each point 
     #their routes touch or if K dna pieces in a row from one parent have been added to one child
 
     ##################################################

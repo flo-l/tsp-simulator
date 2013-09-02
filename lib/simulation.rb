@@ -44,29 +44,23 @@ class Simulation
     fitness = 1/0.0 #infinite
 
     C.times do
-      #select them!
-      @population.selection!
+      #select and mutate them!
+      @population.selection_and_mutation!
 
-      #mutate M %
-      @population.mutation!
+      #find best salesman
+      best = @population.salesmen.first
 
-      #find best fitness
-      fitness_new = @population.salesmen.first.fitness
-
-      if fitness_new < fitness
+      if best.fitness < fitness
         #save new best fitness
-        fitness = fitness_new
+        fitness = best.fitness
     
         #print fitness of the best salesman
         puts fitness
 
-        #plot path of new best salesman and write fitness to stdin
-        Thread.new { Plotter.plot @population.salesmen.first } if plot
+        #plot path of new best salesman
+        Thread.new { Plotter.plot best } if plot
       end
     end
-
-    #plot best result (threaded because gnuplot may hang etc.)
-    Thread.new { Plotter.plot @population.salesmen.first }
 
     #save the best result in the project
     @project.save_result(@population.salesmen.first)
@@ -83,15 +77,12 @@ class Simulation
     fitness = 1/0.0
 
     c = 0
-    while fitness > best_fitness.to_i && c < max_runs do
-      #select them!
-      @population.selection!
+    while fitness > best_fitness && c < max_runs do
+      #select and mutate them!
+      @population.selection_and_mutation!
 
-      #mutate M %
-      @population.mutation!
-
-      #find best fitness and store it
-      fitness = @population.salesmen.first.fitness.to_i
+      #find best fitness
+      fitness = @population.salesmen.first.fitness
 
       #increment the rounds counter
       c += 1

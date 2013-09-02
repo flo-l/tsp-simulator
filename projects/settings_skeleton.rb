@@ -3,8 +3,9 @@ S = N**1.5232960826 #some number
 
 #CROSSOVER => desired crossover algorithm, possible options:
 # => :simple_swap
+# => :scx
 # => :flo_custom
-CROSSOVER = :flo_custom
+CROSSOVER = :scx
 
 #K => max. number of dna-fragments from one parent in a row during pairing (not all algorithms do support this!)
 K = N/3
