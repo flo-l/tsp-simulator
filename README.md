@@ -41,6 +41,13 @@ This will create the folder /projects/NAME and will fill it with the following f
  - settings.rb (settings used for simulation, should be modified to meet ones needs)
  - results (empty folder, will hold result files, they will be named after their fitness eg. 1248.81238)
 
+###Plot the island group of a project:
+    ./project show NAME
+
+where NAME is the project's name
+
+This will show the island group of a project, without connecting lines.
+
 ###Run a simulation round
     ./project simulate NAME TIMES PLOT
 
