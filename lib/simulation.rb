@@ -62,6 +62,9 @@ class Simulation
       end
     end
 
+    #plot the best result if plotting is turned off
+    Thread.new { Plotter.plot @population.salesmen.first } unless plot
+
     #save the best result in the project
     @project.save_result(@population.salesmen.first)
 

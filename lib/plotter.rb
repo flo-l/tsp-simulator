@@ -47,4 +47,38 @@ class Plotter
       end
     end
   end
+
+  def self.plot_islands(project_name)
+    Gnuplot.open do |gp|
+      Gnuplot::Plot.new( gp ) do |plot|
+  
+        plot.title project_name
+
+        #create arrays for x and y
+        x = []
+        y = []
+
+        #fill them
+        ISLANDS.each do |island|      
+          #save coordinates
+          x << island.x
+          y << island.y
+        end
+
+        #plot islands without lines
+        plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
+          ds.with = "points"
+          ds.notitle
+          ds.linecolor = 1
+        end
+
+        #plot first island with different color
+        plot.data << Gnuplot::DataSet.new( [[STARTING_POINT.x], [STARTING_POINT.y]] ) do |ds|
+          ds.with = "points"
+          ds.notitle
+          ds.linecolor = 3
+        end
+      end
+    end
+  end
 end

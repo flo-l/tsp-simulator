@@ -12,6 +12,17 @@ def new_project
   Project.create(ARGV[1], ARGV[2].to_i - 1)
 end
 
+def show_project
+  #close all previous plots
+  Kernel.system("killall gnuplot_qt")
+
+  #create a new Simulation object, ARGV[1] = name
+  simulation = Simulation.new(ARGV[1])
+
+  #plot only the islands
+  Plotter.plot_islands(ARGV[1])
+end
+
 def simulate_project
   #close all previous plots
   Kernel.system("killall gnuplot_qt")
@@ -64,7 +75,7 @@ def benchmark_project
 
   #check which algorithm(s) should be benchmarked
   if ARGV[3..-1].any? { |argument| argument == "all" }
-    algorithms = [:flo_custom, :simple_swap]
+    algorithms = [:scx, :flo_custom, :simple_swap]
   else
     algorithms = ARGV[3..-1].collect { |algorithm| algorithm.downcase.to_sym }
   end
